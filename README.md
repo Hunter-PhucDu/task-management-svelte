@@ -36,3 +36,11 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+
+
+
+# Strategy Pattern
+Strategy định nghĩa một tập các thuật toán liên quan cho một chức năng cụ thể, tách rời phần xử lý đó ra khỏi đối tượng chính. Sau đó, tại thời điểm chạy, ta có thể lựa chọn thuật toán phù hợp nhất trong tập hợp này để thực thi. Pattern này thay thế cho việc dùng kế thừa nhiều lớp con khi ta không muốn theo dõi và chỉnh sửa chức năng qua từng lớp.
+
+# Factory Pattern: 
+Factory: Định nghĩa một interface để khởi tạo một object, nhưng quyền quyết định lớp cụ thể nào sẽ được khởi tạo được giao cho các subclass.

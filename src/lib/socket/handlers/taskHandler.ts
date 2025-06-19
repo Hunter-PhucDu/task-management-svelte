@@ -2,7 +2,6 @@ import type { TypedServer, TypedSocket } from '../events';
 import type { Task } from '../../models/task';
 
 const tasks: Task[] = [];
-const comments: Comment[] = [];
 
 export function registerTaskHandlers(io: TypedServer, socket: TypedSocket) {
   const handleGetAllTasks = () => {

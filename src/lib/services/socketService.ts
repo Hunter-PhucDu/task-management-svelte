@@ -14,6 +14,7 @@ const createSocketStore = () => {
     });
     
     let socket;
+    let initialized = false;
     
     return {
         subscribe,
@@ -26,18 +27,25 @@ const createSocketStore = () => {
                     update(state => ({ ...state, connected: true }));
                     console.log('Socket connected');
                     
-                    socket.emit('user_join', username);
+                    if (username && !initialized) {
+                        socket.emit('user_join', username);
+                        initialized = true;
+                    }
                 });
                 
                 socket.on('disconnect', () => {
                     update(state => ({ ...state, connected: false }));
                     console.log('Socket disconnected');
+                    initialized = false;
                 });
                 
                 socket.on('users_online', (users: string[]) => {
                     update(state => ({ ...state, usersOnline: users }));
                     console.log('Users online:', users);
                 });
+            } else if (socket.connected && !initialized && username) {
+                socket.emit('user_join', username);
+                initialized = true;
             }
             
             return socket;
@@ -47,6 +55,7 @@ const createSocketStore = () => {
             if (socket) {
                 socket.disconnect();
                 socket = null;
+                initialized = false;
             }
         },
         

@@ -2,16 +2,7 @@ import type { TypedServer, TypedSocket } from '../events';
 import type { SocketUserStore } from '../../stores/userStore';
 import type { User } from '../../models/user';
 
-const users: User[] = [
-  {
-    id: '1',
-    username: 'admin',
-    email: 'admin@example.com',
-    passwordHash: 'admin123',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  },
-];
+const users: User[] = [];
 
 export function registerUserHandlers(io: TypedServer, socket: TypedSocket, userStore: SocketUserStore) {
   const handleUserJoin = (username: string) => {

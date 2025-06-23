@@ -13,36 +13,43 @@ const initialState: TasksState = {
     error: null
 };
 
-const mockTasks: Task[] = [];
-
 function createTaskStore() {
     const { subscribe, set, update } = writable<TasksState>({
         ...initialState,
-        tasks: [...mockTasks]
+        tasks: []
     });
 
     return {
         subscribe,
+        set,
+        update,
     
         loadTasks: async () => {
             update(state => ({ ...state, isLoading: true, error: null }));
             
             try {
                 await new Promise(resolve => setTimeout(resolve, 800));
-                
-                update(state => ({
+                  update(state => ({
                     ...state,
-                    tasks: [...mockTasks],
                     isLoading: false
                 }));
             } catch (err) {
                 update(state => ({ 
                     ...state, 
                     isLoading: false, 
-                    error: err.message || 'Failed to load tasks'
+                    error: err instanceof Error ? err.message : 'Failed to load tasks'
                 }));
             }
         },
+
+        setTasks: (tasks: Task[]) => {
+            update(state => ({
+                ...state,
+                tasks,
+                isLoading: false
+            }));
+        },
+        
         addTask: async (task: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>) => {
             update(state => ({ ...state, isLoading: true, error: null }));
             
@@ -68,10 +75,40 @@ function createTaskStore() {
                 update(state => ({ 
                     ...state, 
                     isLoading: false, 
-                    error: err.message || 'Failed to add task'
+                    error: err instanceof Error ? err.message : 'Failed to add task'
                 }));
                 return null;
             }
+        }, 
+        addOrUpdateTask: (task: Task) => {
+            if (!task || !task.id) {
+                return;
+            }
+
+            update(state => {
+                const existingTaskIndex = state.tasks.findIndex(t => t.id === task.id);
+                if (existingTaskIndex === -1) {
+                    return {
+                        ...state,
+                        tasks: [...state.tasks, { ...task }],
+                        isLoading: false
+                    };
+                } else {
+                    const newTasks = [...state.tasks];
+                    newTasks[existingTaskIndex] = { ...task };
+                    return {
+                        ...state,
+                        tasks: newTasks,
+                        isLoading: false
+                    };
+                }
+            });
+             
+            setTimeout(() => {
+                let storeState: TasksState | undefined;
+                const unsubscribe = subscribe(s => { storeState = s; });
+                unsubscribe();
+            }, 10);
         },
         
         updateTask: async (id: string, updates: Partial<Task>) => {
@@ -90,7 +127,8 @@ function createTaskStore() {
                     const updatedTasks = [...state.tasks];
                     updatedTasks[taskIndex] = {
                         ...updatedTasks[taskIndex],
-                        ...updates
+                        ...updates,
+                        updatedAt: new Date().toISOString()
                     };
                     
                     return {
@@ -105,7 +143,7 @@ function createTaskStore() {
                 update(state => ({ 
                     ...state, 
                     isLoading: false, 
-                    error: err.message || 'Failed to update task'
+                    error: err instanceof Error ? err.message : 'Failed to update task'
                 }));
                 return false;
             }
@@ -113,7 +151,6 @@ function createTaskStore() {
         
         deleteTask: async (id: string) => {
             update(state => ({ ...state, isLoading: true, error: null }));
-            
             try {
                 await new Promise(resolve => setTimeout(resolve, 600));
                 
@@ -128,10 +165,17 @@ function createTaskStore() {
                 update(state => ({ 
                     ...state, 
                     isLoading: false, 
-                    error: err.message || 'Failed to delete task'
+                    error: err instanceof Error ? err.message : 'Failed to delete task'
                 }));
                 return false;
             }
+        },
+        
+        removeTask: (taskId: string) => {
+            update(state => ({
+                ...state,
+                tasks: state.tasks.filter(t => t.id !== taskId)
+            }));
         },
 
         clearError: () => {

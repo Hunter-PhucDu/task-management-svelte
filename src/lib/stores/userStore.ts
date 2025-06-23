@@ -1,4 +1,4 @@
-import type { UserStore } from '../socket/events';
+import type { UserStore } from '../services/socket/events';
 
 export class SocketUserStore implements UserStore {
   private users = new Map<string, string>();

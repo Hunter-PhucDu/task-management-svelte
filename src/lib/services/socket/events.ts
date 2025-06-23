@@ -1,5 +1,5 @@
 import { Server, Socket } from 'socket.io';
-import type { Task } from '../models/task';
+import type { Task } from '../../models/task';
 
 export interface ClientToServerEvents {
   user_join: (username: string) => void;

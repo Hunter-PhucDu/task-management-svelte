@@ -39,8 +39,50 @@ You can preview the production build with `npm run preview`.
 
 
 
-# Strategy Pattern
-Strategy định nghĩa một tập các thuật toán liên quan cho một chức năng cụ thể, tách rời phần xử lý đó ra khỏi đối tượng chính. Sau đó, tại thời điểm chạy, ta có thể lựa chọn thuật toán phù hợp nhất trong tập hợp này để thực thi. Pattern này thay thế cho việc dùng kế thừa nhiều lớp con khi ta không muốn theo dõi và chỉnh sửa chức năng qua từng lớp.
+# File Structure
 
-# Factory Pattern: 
-Factory: Định nghĩa một interface để khởi tạo một object, nhưng quyền quyết định lớp cụ thể nào sẽ được khởi tạo được giao cho các subclass.
+```
+task-management-svelte/
+├── src/                    # Source code directory
+│   ├── app.d.ts            # TypeScript declaration file for the app
+│   ├── app.html            # Main HTML template
+│   ├── lib/                # Library code
+│   │   ├── components/     # Svelte components
+│   │   │   ├── auth/       # Authentication components
+│   │   │   │   └── Login.svelte
+│   │   │   ├── dashboard/  # Dashboard components
+│   │   │   │   └── Dashboard.svelte
+│   │   │   └── tasks/      # Task components
+│   │   │       ├── TaskDetail.svelte
+│   │   │       ├── TaskForm.svelte
+│   │   │       └── TaskList.svelte
+│   │   ├── models/         # Data models/interfaces
+│   │   │   ├── task.ts     # Task model definition
+│   │   │   └── user.ts     # User model definition
+│   │   ├── services/       # Services for external communication
+│   │   │   ├── socketClientService.ts  # Client-side socket service
+│   │   │   └── socket/     # Socket.io code
+│   │   │       ├── events.ts           # Socket event definitions
+│   │   │       ├── index.ts            # Socket server setup
+│   │   │       └── handlers/           # Socket event handlers
+│   │   │           ├── taskHandler.ts  # Task socket handlers
+│   │   │           └── userHandler.ts  # User socket handlers
+│   │   ├── stores/         # Svelte stores for state management
+│   │   │   ├── authStore.ts   # Authentication state management
+│   │   │   ├── taskStore.ts   # Task state management
+│   │   │   └── userStore.ts   # User state management
+│   │   └── index.ts        # Library exports
+│   └── routes/             # SvelteKit routes
+│       ├── +layout.svelte  # Layout for all pages
+│       ├── +page.svelte    # Default page (Dashboard)
+│       └── login/          # Login route
+│           └── +page.svelte
+├── static/                 # Static assets
+│   └── favicon.png         # Favicon
+├── .gitignore              # Git ignore file
+├── .npmrc                  # NPM configuration
+├── package.json            # Project dependencies and scripts
+├── svelte.config.js        # Svelte configuration
+├── tsconfig.json           # TypeScript configuration
+└── vite.config.ts          # Vite configuration with Socket.io plugin
+```

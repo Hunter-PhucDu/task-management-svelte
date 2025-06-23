@@ -1,5 +1,5 @@
 import type { TypedServer, TypedSocket } from '../events';
-import type { Task } from '../../models/task';
+import type { Task } from '../../../models/task';
 
 const tasks: Task[] = [];
 

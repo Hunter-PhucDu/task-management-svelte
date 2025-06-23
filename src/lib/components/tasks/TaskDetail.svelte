@@ -31,32 +31,6 @@ function formatDate(dateString) {
     });
 }
 
-function getPriorityColor(priority) {
-    switch (priority) {
-        case 'high':
-            return 'bg-red-100 text-red-800';
-        case 'medium':
-            return 'bg-yellow-100 text-yellow-800';
-        case 'low':
-            return 'bg-green-100 text-green-800';
-        default:
-            return 'bg-gray-100 text-gray-800';
-    }
-}
-
-function getStatusColor(status) {
-    switch (status) {
-        case 'done':
-            return 'bg-green-100 text-green-800';
-        case 'in-progress':
-            return 'bg-blue-100 text-blue-800';
-        case 'todo':
-            return 'bg-gray-100 text-gray-800';
-        default:
-            return 'bg-gray-100 text-gray-800';
-    }
-}
-
 onMount(() => {
     loadTask();
 });
@@ -125,12 +99,12 @@ async function deleteTask() {
                 <h3 class="task-title">{task.title}</h3>
 
                 <div class="task-badges">
-                    <span class="badge {getStatusColor(task.status)}">
+                    <span class="badge">
                         {task.status}
                     </span>
 
                     {#if task.priority}
-                    <span class="badge {getPriorityColor(task.priority)}">
+                    <span class="badge">
                         {task.priority}
                     </span>
                     {/if}
@@ -420,12 +394,6 @@ async function deleteTask() {
 
 .btn-delete:hover {
     background-color: #fed7d7;
-}
-
-
-.input-group {
-    display: flex;
-    gap: 0.5rem;
 }
 
 .btn-text:hover {

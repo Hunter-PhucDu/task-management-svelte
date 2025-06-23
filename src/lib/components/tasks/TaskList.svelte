@@ -1,6 +1,6 @@
 <script lang="ts">
 import { taskStore } from '$lib/stores/taskStore';
-import { socketService } from '$lib/services/socketService';
+import { socketClientService } from '$lib/services/socketClientService';
 import { onMount } from 'svelte';
 
 const props = $props();
@@ -28,32 +28,6 @@ function formatDate(dateString) {
     });
 }
 
-function getPriorityColor(priority) {
-    switch (priority) {
-        case 'high':
-            return 'bg-red-100 text-red-800';
-        case 'medium':
-            return 'bg-yellow-100 text-yellow-800';
-        case 'low':
-            return 'bg-green-100 text-green-800';
-        default:
-            return 'bg-gray-100 text-gray-800';
-    }
-}
-
-function getStatusColor(status) {
-    switch (status) {
-        case 'done':
-            return 'bg-green-100 text-green-800';
-        case 'in-progress':
-            return 'bg-blue-100 text-blue-800';
-        case 'todo':
-            return 'bg-gray-100 text-gray-800';
-        default:
-            return 'bg-gray-100 text-gray-800';
-    }
-}
-
 onMount(async () => {
     isLoading = true;
     await taskStore.loadTasks();
@@ -64,7 +38,7 @@ async function updateTaskStatus(taskId, newStatus) {
     const updates = {
         status: newStatus
     };
-    socketService.updateTask(taskId, updates);
+    socketClientService.updateTask(taskId, updates);
 
     await taskStore.updateTask(taskId, {
         status: newStatus,
@@ -74,7 +48,7 @@ async function updateTaskStatus(taskId, newStatus) {
 
 async function deleteTask(taskId) {
     if (confirm('Are you sure you want to delete this task?')) {
-        socketService.deleteTask(taskId);
+        socketClientService.deleteTask(taskId);
 
         await taskStore.deleteTask(taskId);
     }
@@ -125,12 +99,12 @@ async function deleteTask(taskId) {
             {/if}
             <div class="task-metadata">
                 <div class="task-badges">
-                    <span class="badge {getStatusColor(task.status)}">
+                    <span class="badge">
                         {task.status}
                     </span>
 
                     {#if task.priority}
-                    <span class="badge {getPriorityColor(task.priority)}">
+                    <span class="badge">
                         {task.priority}
                     </span>
                     {/if}

@@ -5,7 +5,7 @@
   import { taskStore } from "$lib/stores/taskStore";
   import TaskList from "$lib/components/tasks/TaskList.svelte";
   import TaskForm from "$lib/components/tasks/TaskForm.svelte";
-  import { socketService } from "$lib/services/socketService";
+  import { socketClientService } from "$lib/services/socketClientService";
 
   let selectedFilter = $state("all");
   let isAddingTask = $state(false);
@@ -26,21 +26,14 @@
   }
 
   function logout() {
-    socketService.disconnect();
+    socketClientService.disconnect();
     authStore.logout();
     goto("/login");
   }
 
   function startEditingTask(task) {
-    console.log("Starting to edit task:", task);
     editingTask = task;
     isAddingTask = true;
-    console.log(
-      "Edit mode activated, editingTask =",
-      editingTask,
-      "isAddingTask =",
-      isAddingTask
-    );
   }
 
   function handleFormClosed() {
@@ -53,12 +46,13 @@
     editingTask = null;
   }
 
-  function handleTaskUpdated(taskId) {
-    console.log("Task updated:", taskId);
+function handleTaskUpdated(updatedTask) {
+  if (updatedTask && updatedTask.id) {
+    taskStore.addOrUpdateTask(updatedTask);
   }
+}
 
   function handleTasksUpdate(tasks) {
-    console.log("Received all tasks from server:", tasks);
     if (tasks && Array.isArray(tasks)) {
       taskStore.setTasks(tasks);
     }
@@ -82,15 +76,15 @@
 
   function initSocket() {
     const username = $authStore.user ? $authStore.user.username : "anonymous";
-    socket = socketService.connect(username);
+    socket = socketClientService.connect(username);
 
-    unsubscribe = socketService.subscribe((state) => {
+    unsubscribe = socketClientService.subscribe((state) => {
       isConnected = state.connected;
       usersOnline = state.usersOnline;
     });
 
     socket.on("connect", () => {
-      socketService.getTasks();
+      socketClientService.getTasks();
     });
 
     socket.on("disconnect", () => {});
@@ -101,7 +95,7 @@
 
     socket.on("task_created", (task) => {});
 
-    unsubscribeTasks = socketService.subscribeToTasks(
+    unsubscribeTasks = socketClientService.subscribeToTasks(
       handleTasksUpdate,
       handleTaskCreated,
       handleTaskUpdated,

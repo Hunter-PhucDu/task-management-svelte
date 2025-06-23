@@ -8,7 +8,7 @@ type SocketState = {
 }
 
 const createSocketStore = () => {
-    const { subscribe, update, set } = writable<SocketState>({
+    const { subscribe, update } = writable<SocketState>({
         connected: false,
         usersOnline: []
     });
@@ -117,4 +117,4 @@ const createSocketStore = () => {
     };
 };
 
-export const socketService = createSocketStore();
+export const socketClientService = createSocketStore();

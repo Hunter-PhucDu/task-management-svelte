@@ -1,7 +1,7 @@
 <script lang="ts">
 import { taskStore } from '$lib/stores/taskStore';
 import { authStore } from '$lib/stores/authStore';
-import { socketService } from '$lib/services/socketService';
+import { socketClientService } from '$lib/services/socketClientService';
 
 type TaskStatus = 'todo' | 'in-progress' | 'done';
 type TaskPriority = 'low' | 'medium' | 'high';
@@ -61,7 +61,7 @@ function resetForm() {
 }
 
 $effect(() => {
-    const unsubscribe = socketService.subscribe(state => {
+    const unsubscribe = socketClientService.subscribe(state => {
         onlineUsers = state.usersOnline;
     });
     return unsubscribe;
@@ -91,7 +91,7 @@ async function handleSubmit(event) {
                 createdBy: $authStore.user?.id || '1'
             };
 
-            socketService.createTask(newTaskData);
+            socketClientService.createTask(newTaskData);
 
             resetForm();
             if (props.onFormClosed) props.onFormClosed();
@@ -106,7 +106,7 @@ async function handleSubmit(event) {
                 dueDate: taskData.dueDate
             };
 
-            socketService.updateTask(taskData.id, updates);
+            socketClientService.updateTask(taskData.id, updates);
             
             const result = await taskStore.updateTask(taskData.id, updates);
             

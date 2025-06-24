@@ -39,7 +39,7 @@ You can preview the production build with `npm run preview`.
 
 
 
-# File Structure
+# Folder Structure
 
 ```
 task-management-svelte/

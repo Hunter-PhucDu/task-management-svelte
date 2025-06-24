@@ -1,17 +1,36 @@
-# sv
+## Project Overview
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+The application uses Socket.IO for real-time bidirectional communication:
 
-## Creating a project
+- Tasks are synchronized across all connected clients
+- User presence is tracked and displayed
+- Changes are broadcast to all relevant clients instantly
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Features
+
+- Real-time task updates using Socket.IO
+- User authentication and presence awareness
+- Task creation, editing, and deletion
+- Task assignment and prioritization
+- Responsive user interface
+
+## Project Architecture
+
+The application follows a client-server architecture:
+
+- **Client**: SvelteKit frontend with Socket.IO client
+- **Server**: Socket.IO server integrated with Vite dev server
+- **State Management**: Svelte stores for client-side state
+
+## System Requirements
+
+- Node.js 22.x or higher
+- npm 10.x or higher
+
+## Install dependencies:
 
 ```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+npm install
 ```
 
 ## Developing

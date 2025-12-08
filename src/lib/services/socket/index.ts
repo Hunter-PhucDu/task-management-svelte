@@ -3,7 +3,7 @@ import type { ViteDevServer } from 'vite';
 import type { TypedServer, TypedSocket } from './events';
 import { registerUserHandlers } from './handlers/userHandler';
 import { registerTaskHandlers } from './handlers/taskHandler';
-import { SocketUserStore } from '../stores/userStore';
+import { SocketUserStore } from '../../stores/userStore';
 
 export function createSocketServer(server: ViteDevServer) {
   const io: TypedServer = new Server(server.httpServer, {

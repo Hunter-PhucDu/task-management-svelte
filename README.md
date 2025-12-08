@@ -1,17 +1,36 @@
-# sv
+## Project Overview
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+The application uses Socket.IO for real-time bidirectional communication:
 
-## Creating a project
+- Tasks are synchronized across all connected clients
+- User presence is tracked and displayed
+- Changes are broadcast to all relevant clients instantly
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Features
+
+- Real-time task updates using Socket.IO
+- User authentication and presence awareness
+- Task creation, editing, and deletion
+- Task assignment and prioritization
+- Responsive user interface
+
+## Project Architecture
+
+The application follows a client-server architecture:
+
+- **Client**: SvelteKit frontend with Socket.IO client
+- **Server**: Socket.IO server integrated with Vite dev server
+- **State Management**: Svelte stores for client-side state
+
+## System Requirements
+
+- Node.js 22.x or higher
+- npm 10.x or higher
+
+## Install dependencies:
 
 ```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+npm install
 ```
 
 ## Developing
@@ -39,8 +58,50 @@ You can preview the production build with `npm run preview`.
 
 
 
-# Strategy Pattern
-Strategy định nghĩa một tập các thuật toán liên quan cho một chức năng cụ thể, tách rời phần xử lý đó ra khỏi đối tượng chính. Sau đó, tại thời điểm chạy, ta có thể lựa chọn thuật toán phù hợp nhất trong tập hợp này để thực thi. Pattern này thay thế cho việc dùng kế thừa nhiều lớp con khi ta không muốn theo dõi và chỉnh sửa chức năng qua từng lớp.
+# Folder Structure
 
-# Factory Pattern: 
-Factory: Định nghĩa một interface để khởi tạo một object, nhưng quyền quyết định lớp cụ thể nào sẽ được khởi tạo được giao cho các subclass.
+```
+task-management-svelte/
+├── src/                    # Source code directory
+│   ├── app.d.ts            # TypeScript declaration file for the app
+│   ├── app.html            # Main HTML template
+│   ├── lib/                # Library code
+│   │   ├── components/     # Svelte components
+│   │   │   ├── auth/       # Authentication components
+│   │   │   │   └── Login.svelte
+│   │   │   ├── dashboard/  # Dashboard components
+│   │   │   │   └── Dashboard.svelte
+│   │   │   └── tasks/      # Task components
+│   │   │       ├── TaskDetail.svelte
+│   │   │       ├── TaskForm.svelte
+│   │   │       └── TaskList.svelte
+│   │   ├── models/         # Data models/interfaces
+│   │   │   ├── task.ts     # Task model definition
+│   │   │   └── user.ts     # User model definition
+│   │   ├── services/       # Services for external communication
+│   │   │   ├── socketClientService.ts  # Client-side socket service
+│   │   │   └── socket/     # Socket.io code
+│   │   │       ├── events.ts           # Socket event definitions
+│   │   │       ├── index.ts            # Socket server setup
+│   │   │       └── handlers/           # Socket event handlers
+│   │   │           ├── taskHandler.ts  # Task socket handlers
+│   │   │           └── userHandler.ts  # User socket handlers
+│   │   ├── stores/         # Svelte stores for state management
+│   │   │   ├── authStore.ts   # Authentication state management
+│   │   │   ├── taskStore.ts   # Task state management
+│   │   │   └── userStore.ts   # User state management
+│   │   └── index.ts        # Library exports
+│   └── routes/             # SvelteKit routes
+│       ├── +layout.svelte  # Layout for all pages
+│       ├── +page.svelte    # Default page (Dashboard)
+│       └── login/          # Login route
+│           └── +page.svelte
+├── static/                 # Static assets
+│   └── favicon.png         # Favicon
+├── .gitignore              # Git ignore file
+├── .npmrc                  # NPM configuration
+├── package.json            # Project dependencies and scripts
+├── svelte.config.js        # Svelte configuration
+├── tsconfig.json           # TypeScript configuration
+└── vite.config.ts          # Vite configuration with Socket.io plugin
+```

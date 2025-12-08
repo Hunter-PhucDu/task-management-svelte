@@ -1,6 +1,6 @@
 import type { TypedServer, TypedSocket } from '../events';
-import type { SocketUserStore } from '../../stores/userStore';
-import type { User } from '../../models/user';
+import type { SocketUserStore } from '../../../stores/userStore';
+import type { User } from '../../../models/user';
 
 const users: User[] = [];
 
